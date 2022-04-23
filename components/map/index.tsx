@@ -121,6 +121,10 @@ const Map: React.FC<Props> = ({ data: { row } }) => {
             title: coordinate[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
             image: markerImage, // 마커 이미지
           });
+
+          // var infowindow = new kakao.maps.InfoWindow({
+          //   content: positions[i].content, // 인포윈도우에 표시할 내용
+          // });
         }
 
         marker.setMap(map);
