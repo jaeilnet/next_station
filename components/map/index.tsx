@@ -1,7 +1,5 @@
 import dayjs from "dayjs";
-import { title } from "process";
 import React, { useEffect } from "react";
-import UseFetch from "../useCustom/UseFetch";
 import markerStation from "./marker";
 interface MapProps {
   data?: any;
@@ -35,6 +33,22 @@ const Map: React.FC<Props> = ({ data: { row } }) => {
           level: 6,
         };
         const map = new window.kakao.maps.Map(container, options);
+
+        if ("geolocation" in navigator) {
+          /* 위치정보 사용 가능 */
+          // 37.5455744 126.8350976
+          console.log(
+            navigator.geolocation.getCurrentPosition((position) =>
+              console.log(
+                position.coords.latitude,
+                position.coords.longitude,
+                "성공"
+              )
+            )
+          );
+        } else {
+          /* 위치정보 사용 불가능 */
+        }
 
         const coordinate = row.map((e: any) => {
           return {
