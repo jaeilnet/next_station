@@ -1,7 +1,9 @@
 import dayjs from "dayjs";
 import React, { useEffect } from "react";
+import UseFetch from "../useCustom/UseFetch";
 import markerStation from "./marker";
 interface MapProps {
+  data;
   data?: any;
 }
 
@@ -15,7 +17,7 @@ type Props = MapProps;
 const Map: React.FC<Props> = ({ data: { row } }) => {
   // console.log(row);
   const APIKEY = process.env.NEXT_PUBLIC_KAKAOMAP_APPKEY;
-  const TimeLine = process.env.NEXT_PUBLIC_SEOUL_API_KEY;
+  const REAL_TIEM_APIKEY = process.env.NEXT_PUBLIC_REAL_TIME_API_KEY;
 
   useEffect(() => {
     const mapScript = document.createElement("script");
@@ -34,22 +36,6 @@ const Map: React.FC<Props> = ({ data: { row } }) => {
         };
         const map = new window.kakao.maps.Map(container, options);
 
-        if ("geolocation" in navigator) {
-          /* 위치정보 사용 가능 */
-          // 37.5455744 126.8350976
-          console.log(
-            navigator.geolocation.getCurrentPosition((position) =>
-              console.log(
-                position.coords.latitude,
-                position.coords.longitude,
-                "성공"
-              )
-            )
-          );
-        } else {
-          /* 위치정보 사용 불가능 */
-        }
-
         const coordinate = row.map((e: any) => {
           return {
             title: e.ROUTE + " " + e.STATN_NM,
@@ -57,33 +43,74 @@ const Map: React.FC<Props> = ({ data: { row } }) => {
           };
         });
 
-        for (let i = 0; i < row.length; i++) {
-          const imageSrc = markerStation(row[i].ROUTE);
-          const imageSize = new window.kakao.maps.Size(18, 18);
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(function (po) {
+            const latitude = po.coords.latitude;
+            const longitude = po.coords.longitude;
 
-          let markerImage = new window.kakao.maps.MarkerImage(
-            imageSrc,
-            imageSize
+            let position = new window.kakao.maps.LatLng(latitude, longitude);
+
+            showMarker(position);
+          });
+        } else {
+          let position = new window.kakao.maps.LatLng(37.556228, 126.972135);
+
+          showMarker(position);
+        }
+
+        function showMarker(position: { La: number; Ma: number }) {
+          const { La, Ma } = position;
+          const filter = coordinate.filter(
+            (e: any) =>
+              La - e.latlng.La < 0.014 &&
+              La - e.latlng.La > -0.014 &&
+              Ma - e.latlng.Ma < 0.006 &&
+              Ma - e.latlng.Ma > -0.006
           );
 
-          let marker = new window.kakao.maps.Marker({
-            map: map,
-            position: coordinate[i].latlng,
-            image: markerImage,
-            title: coordinate[i].title,
-          });
+          // 경도(가로길이만 비교함 위도 해야함)
+          const sort = filter.sort(
+            (a, b) => Math.abs(La - a.latlng.La) - Math.abs(La - b.latlng.La)
+          );
 
-          marker.setMap(map);
-          // map.setCenter(locPosition);
+          const findStation = sort.map((e) => e.title.split(" ")[1]);
+
+          handleFindSubway(findStation[0]);
+
+          for (let i = 0; i < filter.length; i++) {
+            const imageSrc = markerStation(filter[i].title.split(" ")[0]);
+            const imageSize = new window.kakao.maps.Size(18, 18);
+
+            let markerImage = new window.kakao.maps.MarkerImage(
+              imageSrc,
+              imageSize
+            );
+
+            let marker = new window.kakao.maps.Marker({
+              map: map,
+              position: filter[i].latlng,
+              image: markerImage,
+              title: filter[i].title,
+            });
+
+            map.setCenter(position);
+          }
         }
       });
+
+      async function handleFindSubway(stationName: string) {
+        const { data } = await UseFetch(
+          `http://swopenapi.seoul.go.kr/api/subway/${REAL_TIEM_APIKEY}/json/realtimeStationArrival/0/5/${stationName}`
+        );
+        console.log(data, "data");
+      }
     };
     mapScript.addEventListener("load", onLoadKakaoMap);
 
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
   }, [row]);
 
-  return <div style={{ width: "100%", height: "800px" }} id="map"></div>;
+  return <div style={{ width: "100%", height: "600px" }} id="map"></div>;
 };
 
 export default Map;
