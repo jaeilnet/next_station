@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import UseFetch from "../useCustom/UseFetch";
 import markerStation from "./marker";
 interface MapProps {
-  data;
   data?: any;
 }
 
@@ -70,10 +69,11 @@ const Map: React.FC<Props> = ({ data: { row } }) => {
 
           // 경도(가로길이만 비교함 위도 해야함)
           const sort = filter.sort(
-            (a, b) => Math.abs(La - a.latlng.La) - Math.abs(La - b.latlng.La)
+            (a: any, b: any) =>
+              Math.abs(La - a.latlng.La) - Math.abs(La - b.latlng.La)
           );
 
-          const findStation = sort.map((e) => e.title.split(" ")[1]);
+          const findStation = sort.map((e: any) => e.title.split(" ")[1]);
 
           handleFindSubway(findStation[0]);
 
