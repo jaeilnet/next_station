@@ -148,7 +148,12 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
   }, [row]);
 
-  return <div style={{ width: "100%", height: "600px" }} id="map"></div>;
+  return (
+    <div
+      style={{ maxWidth: "375px", width: "100%", height: "600px" }}
+      id="map"
+    ></div>
+  );
 };
 
 export default Map;
