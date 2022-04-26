@@ -18,3 +18,9 @@ a {
 li {
   list-style: none;
 }
+
+.infoMessage {
+  border: 1px solid black;
+  background: #fff;
+  padding: 8px;
+}

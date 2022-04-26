@@ -2,19 +2,33 @@ import dayjs from "dayjs";
 import React, { useEffect } from "react";
 import UseFetch from "../useCustom/UseFetch";
 import markerStation from "./marker";
+
 interface MapProps {
-  data?: any;
+  data: {
+    row: row[];
+  };
+  handleStationInfo: (data: any) => void;
 }
 
 interface coordinate {
   title: string;
-  latlng: any;
+  latlng: {
+    La: number;
+    Ma: number;
+  };
+}
+
+interface row {
+  CRDNT_X: string;
+  CRDNT_Y: string;
+  ROUTE: string;
+  STATN_ID: string;
+  STATN_NM: string;
 }
 
 type Props = MapProps;
 
-const Map: React.FC<Props> = ({ data: { row } }) => {
-  // console.log(row);
+const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
   const APIKEY = process.env.NEXT_PUBLIC_KAKAOMAP_APPKEY;
   const REAL_TIEM_APIKEY = process.env.NEXT_PUBLIC_REAL_TIME_API_KEY;
 
@@ -35,7 +49,7 @@ const Map: React.FC<Props> = ({ data: { row } }) => {
         };
         const map = new window.kakao.maps.Map(container, options);
 
-        const coordinate = row.map((e: any) => {
+        const coordinate = row.map((e: row): coordinate => {
           return {
             title: e.ROUTE + " " + e.STATN_NM,
             latlng: new window.kakao.maps.LatLng(e.CRDNT_Y, e.CRDNT_X),
@@ -55,12 +69,13 @@ const Map: React.FC<Props> = ({ data: { row } }) => {
           let position = new window.kakao.maps.LatLng(37.556228, 126.972135);
 
           showMarker(position);
+          alert("위치정보를 받아 올 수 없습니다.");
         }
 
         function showMarker(position: { La: number; Ma: number }) {
           const { La, Ma } = position;
           const filter = coordinate.filter(
-            (e: any) =>
+            (e: coordinate) =>
               La - e.latlng.La < 0.014 &&
               La - e.latlng.La > -0.014 &&
               Ma - e.latlng.Ma < 0.006 &&
@@ -69,11 +84,18 @@ const Map: React.FC<Props> = ({ data: { row } }) => {
 
           // 경도(가로길이만 비교함 위도 해야함)
           const sort = filter.sort(
-            (a: any, b: any) =>
+            (a: any, b: any): number =>
               Math.abs(La - a.latlng.La) - Math.abs(La - b.latlng.La)
           );
 
-          const findStation = sort.map((e: any) => e.title.split(" ")[1]);
+          const findStation = sort.map(
+            (e: coordinate) => e.title.split(" ")[1]
+          );
+
+          filter.push({
+            title: "me",
+            latlng: position,
+          });
 
           handleFindSubway(findStation[0]);
 
@@ -93,7 +115,18 @@ const Map: React.FC<Props> = ({ data: { row } }) => {
               title: filter[i].title,
             });
 
+            let customOverlay = new window.kakao.maps.CustomOverlay({
+              content: `<div class="infoMessage">${"현재위치"}</div>`,
+              position: filter[filter.length - 1].latlng,
+              removable: true,
+              xAnchor: 0.5,
+              yAnchor: 0.1,
+              zIndex: 99,
+            });
+
+            customOverlay.setMap(map);
             map.setCenter(position);
+            // marker.setMap(map);
           }
         }
       });
@@ -102,7 +135,7 @@ const Map: React.FC<Props> = ({ data: { row } }) => {
         const { data } = await UseFetch(
           `http://swopenapi.seoul.go.kr/api/subway/${REAL_TIEM_APIKEY}/json/realtimeStationArrival/0/5/${stationName}`
         );
-        console.log(data, "data");
+        handleStationInfo(data);
       }
     };
     mapScript.addEventListener("load", onLoadKakaoMap);

@@ -1,9 +1,10 @@
 import dayjs from "dayjs";
 import React from "react";
+import { RealTimeArrivalListType } from "../constant";
 import classes from "./StationInfo.module.css";
 
 interface Props {
-  data: any;
+  data: RealTimeArrivalListType[];
 }
 
 const StationInfo: React.FC<Props> = ({ data }) => {
