@@ -27,10 +27,10 @@ const MAP: NextPage = ({ data }: any) => {
   return (
     <>
       <Head>
-        <meta
+        {/* <meta
           httpEquiv="Content-Security-Policy"
           content="upgrade-insecure-requests"
-        ></meta>
+        ></meta> */}
       </Head>
       <div className={classes.layout}>
         <div className={classes.container}>
