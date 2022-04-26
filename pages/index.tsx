@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import Head from "next/head";
 import { useState } from "react";
 import { StationInfoType } from "../components/constant";
 import Map from "../components/map";
@@ -24,19 +25,27 @@ const MAP: NextPage = ({ data }: any) => {
   };
 
   return (
-    <div className={classes.layout}>
-      <div className={classes.container}>
-        <Map
-          data={data.subwayStationMaster}
-          handleStationInfo={handleStationInfo}
-        />
-        {stationInfo && stationInfo.errorMessage?.status === 200 ? (
-          <StationInfo data={stationInfo.realtimeArrivalList} />
-        ) : (
-          <div>정보 가져오는 중...</div>
-        )}
+    <>
+      <Head>
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
+        ></meta>
+      </Head>
+      <div className={classes.layout}>
+        <div className={classes.container}>
+          <Map
+            data={data.subwayStationMaster}
+            handleStationInfo={handleStationInfo}
+          />
+          {stationInfo && stationInfo.errorMessage?.status === 200 ? (
+            <StationInfo data={stationInfo.realtimeArrivalList} />
+          ) : (
+            <div>정보 가져오는 중...</div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
