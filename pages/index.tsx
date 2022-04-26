@@ -30,7 +30,7 @@ const MAP: NextPage = ({ data }: any) => {
         <meta
           httpEquiv="Content-Security-Policy"
           content="upgrade-insecure-requests"
-        ></meta>
+        />
       </Head>
       <div className={classes.layout}>
         <div className={classes.container}>
