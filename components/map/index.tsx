@@ -132,11 +132,15 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
       });
 
       async function handleFindSubway(stationName: string) {
-        const { data } = await UseFetch(
-          `http://swopenapi.seoul.go.kr/api/subway/${REAL_TIEM_APIKEY}/json/realtimeStationArrival/0/5/${stationName}`
-        );
-        console.log(data, "dta");
-        handleStationInfo(data);
+        try {
+          const { data } = await UseFetch(
+            `http://swopenapi.seoul.go.kr/api/subway/${REAL_TIEM_APIKEY}/json/realtimeStationArrival/0/5/${stationName}`
+          );
+          console.log(data, "dta");
+          handleStationInfo(data);
+        } catch (error) {
+          alert("에러발생");
+        }
       }
     };
     mapScript.addEventListener("load", onLoadKakaoMap);
