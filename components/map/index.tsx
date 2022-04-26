@@ -135,7 +135,7 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
         console.log(stationName, "stationName");
         console.log(decodeURI(stationName));
         const { data } = await UseFetch(
-          `http://swopenapi.seoul.go.kr/api/subway/${REAL_TIEM_APIKEY}/json/realtimeStationArrival/0/5/${encodeURIComponent(
+          `http://swopenapi.seoul.go.kr/api/subway/${REAL_TIEM_APIKEY}/json/realtimeStationArrival/0/5/${decodeURI(
             stationName
           )}`
         );
