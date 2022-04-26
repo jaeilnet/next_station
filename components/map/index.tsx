@@ -132,7 +132,7 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
       });
 
       async function handleFindSubway(stationName: string) {
-        console.log("스테이션 불러오기");
+        console.log(encodeURIComponent(stationName));
         const { data } = await UseFetch(
           `http://swopenapi.seoul.go.kr/api/subway/${REAL_TIEM_APIKEY}/json/realtimeStationArrival/0/5/${encodeURIComponent(
             stationName
