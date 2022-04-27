@@ -1,5 +1,4 @@
 const markerStation = (route: string) => {
-  console.log(route, "dd");
   switch (route) {
     case "1호선":
     case "경부선":

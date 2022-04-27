@@ -1,13 +1,14 @@
 import dayjs from "dayjs";
 import React, { useEffect } from "react";
-import UseFetch from "../useCustom/UseFetch";
+import { API_post } from "../common/api";
+import { RealTimeArrivalListType } from "../constant";
 import markerStation from "./marker";
 
 interface MapProps {
   data: {
     row: row[];
   };
-  handleStationInfo: (data: any) => void;
+  handleStationInfo: (data: RealTimeArrivalListType) => void;
 }
 
 interface coordinate {
@@ -133,13 +134,15 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
 
       async function handleFindSubway(stationName: string) {
         try {
-          const { data } = await UseFetch(
-            `http://swopenapi.seoul.go.kr/api/subway/${REAL_TIEM_APIKEY}/json/realtimeStationArrival/0/5/${stationName}`
-          );
-          console.log(data, "dta");
-          handleStationInfo(data);
+          const {
+            data: { stationInfo },
+          } = await API_post(`/api/station`, { stationName });
+
+          if (stationInfo.realtimeArrivalList.length > 0) {
+            handleStationInfo(stationInfo);
+          }
         } catch (error) {
-          alert("에러발생");
+          console.log("역 가져오기 에러발생");
         }
       }
     };

@@ -1,6 +1,8 @@
+import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
+import { API_get } from "../components/common/api";
 import { StationInfoType } from "../components/constant";
 import Map from "../components/map";
 import StationInfo from "../components/map/StationInfo";
@@ -54,7 +56,7 @@ export default MAP;
 export async function getStaticProps() {
   const SEOUL_API_KEY = process.env.NEXT_PUBLIC_SEOUL_API_KEY;
 
-  const { data: coordinate } = await UseFetch(
+  const { data: coordinate } = await API_get(
     `http://openapi.seoul.go.kr:8088/${SEOUL_API_KEY}/json/subwayStationMaster/1/742/`
   );
 
