@@ -8,7 +8,7 @@ interface Props {
 const Header: React.FC<Props> = ({}) => {
   return (
     <div className={classes.container}>
-      <div className={classes.headerBox}>
+      <div className={classes.HeaderBox}>
         <div className={classes.logo}>
           <div>로고</div>
           <div>이미지</div>
