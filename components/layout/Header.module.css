@@ -4,11 +4,12 @@
   max-width: 1024px;
   display: flex;
   align-items: center;
+  margin: 0 auto;
 }
 
 .HeaderBox {
-  margin: 0 auto;
-  max-width: 375px;
+  margin: 0 20px;
+  /* max-width: 375px; */
   width: 100%;
   display: flex;
   justify-content: space-between;
