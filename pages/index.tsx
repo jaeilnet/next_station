@@ -1,4 +1,3 @@
-import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
@@ -6,7 +5,6 @@ import { API_get } from "../components/common/api";
 import { StationInfoType } from "../components/constant";
 import Map from "../components/map";
 import StationInfo from "../components/map/StationInfo";
-import UseFetch from "../components/useCustom/UseFetch";
 import classes from "../styles/Home.module.css";
 
 const MAP: NextPage = ({ data }: any) => {

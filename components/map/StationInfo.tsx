@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React from "react";
+import React, { useState } from "react";
 import { RealTimeArrivalListType } from "../constant";
 import classes from "./StationInfo.module.css";
 
@@ -7,27 +7,39 @@ interface Props {
   data: RealTimeArrivalListType[];
 }
 
+interface DetailState {
+  index: Number | null;
+  show: boolean;
+}
+
 const StationInfo: React.FC<Props> = ({ data }) => {
-  const arriveInfo = (type: string) => {
-    switch (type) {
-      case "0":
-        return "진입";
-      case "1":
-        return "도착";
-      case "2":
-        return "출발";
-      case "3":
-        return "전역 출발";
-      case "4":
-        return "전역 진입";
-      case "5":
-        return "전역 도착";
-      case "99":
-        return "운행중";
-      default:
-        return;
-    }
-  };
+  const [detail, setDetail] = useState<any>({
+    index: null,
+    show: false,
+  });
+
+  console.log(data, "data");
+
+  // const arriveInfo = (type: string) => {
+  //   switch (type) {
+  //     case "0":
+  //       return "진입";
+  //     case "1":
+  //       return "도착";
+  //     case "2":
+  //       return "출발";
+  //     case "3":
+  //       return "전역 출발";
+  //     case "4":
+  //       return "전역 진입";
+  //     case "5":
+  //       return "전역 도착";
+  //     case "99":
+  //       return "운행중";
+  //     default:
+  //       return;
+  //   }
+  // };
 
   const arriveScheduledTime = (date: string) => {
     return Math.floor(+date / 60) + "분 소요예정";
@@ -50,96 +62,67 @@ const StationInfo: React.FC<Props> = ({ data }) => {
 
   return (
     <div className={classes.container}>
-      {data.map((e: any, i: number) => (
-        <ul className={classes.statinList} key={i}>
-          <li>
-            <p>지하철 역명</p>
-            <p>{e.statnNm}</p>
-          </li>
-          <li>{arriveInfo(e.arvlCd)}</li>
-          <li>
-            <p>열차상태</p>
-            <p>{e.arvlMsg2}</p>
-          </li>
-          <li>
-            <p>현재위치</p>
-            <p>{e.arvlMsg3}</p>
-          </li>
-          {e.barvlDt > 0 && (
-            <li>
-              <p>도착 예정시간</p>
-              <p>{arriveScheduledTime(e.barvlDt)}</p>
-            </li>
-          )}
-          <li>
-            <p>최종 목적지</p>
-            <p>{e.bstatnNm}</p>
-          </li>
-          <li>
-            <p>열차 번호</p>
-            <p>{e.btrainNo}</p>
-          </li>
-
-          <li>
-            <p> 도착 예정시간</p>
-            <p>{arriveDate(e.recptnDt)}</p>
-          </li>
-
-          <li>
-            <p>내리는 방향</p>
-            <p>{e.subwayHeading}</p>
-          </li>
-
-          <li>
-            <p> 상하행선구분</p>
-            <p>{arriveUpdnLine(e.updnLine)}</p>
-          </li>
-          <li>
-            <p> 도착지방면</p>
-            <p>{e.trainLineNm}</p>
-          </li>
-          {e.btrainSttus !== null && (
-            <li>
-              <p> 열차종류 (급행,ITX)</p>
-              <p>{e.btrainSttus}</p>
-            </li>
-          )}
-          {/* <li>
-            <p> 도착예정열차순번</p>
-            <p>{e.ordkey}</p>
-          </li> */}
-          {/* <li>
-            <p>지하철 호선 id</p>
-            <p>{e.subwayId}</p>
-          </li> */}
-          {/* <li>
-            <p> 연계호선ID (1002, 1007 등 연계대상 호상ID)</p>
-            <p>{e.subwayList}</p>
-          </li> */}
-          {/* <li>
-            <p>이전지하철역ID</p>
-            <p>{e.statnFid}</p>
-          </li>
-          <li>
-            <p>지하철역ID</p>
-            <p>{e.statnId}</p>
-          </li>
-          <li>
-            <p>연계지하철역 id</p>
-            <p>{e.statnList}</p>
-          </li>
-          <li>
-            <p>다음지하철역ID </p>
-            <p>{e.statnTid}</p>
-          </li> */}
-          {/* <li>
-            <p>종착역 id</p>
-            <p>{e.bstatnId}</p>
-          </li> */}
-        </ul>
+      {data.map((e: RealTimeArrivalListType, i: number) => (
+        <div className={classes.statinList} key={i}>
+          <div>
+            <p>{`${e.statnNm}역`}</p>
+            <p className={classes.station}>{e.trainLineNm}</p>
+            <button onClick={() => setDetail({ index: i, show: !detail.show })}>
+              자세히보기
+            </button>
+          </div>
+          {/* <li>{arriveInfo(e.arvlCd)}</li> */}
+          {detail.show && detail.index === i ? (
+            <>
+              <div className={classes.position}>
+                <p>현재위치</p>
+                <p className={classes.desc}>{e.arvlMsg3}</p>
+                {e.barvlDt > "0" ? (
+                  <>
+                    <p>도착 예정시간</p>
+                    <p className={classes.desc}>{arriveDate(e.recptnDt)}</p>
+                    <p className={classes.desc}>
+                      {arriveScheduledTime(e.barvlDt)}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>열차상태</p>
+                    <p className={classes.desc}>{e.arvlMsg2}</p>
+                  </>
+                )}
+              </div>
+              <div>
+                <p>최종 목적지</p>
+                <p className={classes.desc}>{e.bstatnNm}</p>
+              </div>
+              <div>
+                <p>내리는 방향</p>
+                <p className={classes.desc}>{e.subwayHeading}</p>
+              </div>
+              <div>
+                <p> 상하행선구분</p>
+                <p className={classes.desc}>{arriveUpdnLine(e.updnLine)}</p>
+              </div>
+              {e.btrainSttus !== null && (
+                <div>
+                  <p> 열차종류 (급행,ITX)</p>
+                  <p className={classes.desc}>{e.btrainSttus}</p>
+                </div>
+              )}
+            </>
+          ) : null}
+        </div>
       ))}
     </div>
   );
 };
 
 export default StationInfo;
+
+{
+  /* <li>
+            <p>열차 번호</p>
+            <p>{e.btrainNo}</p>
+          </li> */
+}
