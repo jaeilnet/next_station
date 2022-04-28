@@ -1,3 +1,7 @@
+export interface StationInfoIdType extends StationInfoType {
+  id: any;
+}
+
 export interface StationInfoType {
   errorMessage: ErrorMessageType;
   realtimeArrivalList: RealTimeArrivalListType[];

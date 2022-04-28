@@ -1,10 +1,13 @@
 import dayjs from "dayjs";
+import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
+import { row } from ".";
 import { RealTimeArrivalListType } from "../constant";
 import classes from "./StationInfo.module.css";
 
 interface Props {
   data: RealTimeArrivalListType[];
+  id: any;
 }
 
 interface DetailState {
@@ -12,11 +15,13 @@ interface DetailState {
   show: boolean;
 }
 
-const StationInfo: React.FC<Props> = ({ data }) => {
+const StationInfo: React.FC<Props> = ({ data, id }) => {
   const [detail, setDetail] = useState<DetailState>({
     index: null,
     show: false,
   });
+
+  const router = useRouter();
 
   const arriveScheduledTime = useCallback((date: string) => {
     return Math.floor(+date / 60) + "분 소요예정";
@@ -44,7 +49,15 @@ const StationInfo: React.FC<Props> = ({ data }) => {
     }
   };
 
-  console.log(detail, "detail");
+  const handleDetail = () => {
+    const filter = id.filter((e: row) => e.ROUTE === "2호선");
+
+    router.push(
+      `/stationDetail/${encodeURI(filter[0].STATN_NM)}/${filter[0].STATN_ID}`
+    );
+  };
+
+  // console.log(data, id, "detail");
 
   return (
     <div className={classes.container}>
@@ -52,7 +65,7 @@ const StationInfo: React.FC<Props> = ({ data }) => {
         data.map((e: RealTimeArrivalListType, i: number) => (
           <div className={classes.statinList} key={i}>
             <div>
-              <p>{`${e.statnNm}역`}</p>
+              <div onClick={() => handleDetail()}>{`${e.statnNm}역`}</div>
               <p className={classes.station}>{e.trainLineNm}</p>
               <p className={classes.station}>{`${e.btrainNo}호`}</p>
               <button onClick={() => showDetail(i)}>
