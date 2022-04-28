@@ -44,7 +44,7 @@ const StationInfo: React.FC<Props> = ({ data }) => {
     }
   };
 
-  console.log(detail, "detail");
+  // console.log(detail, "detail");
 
   return (
     <div className={classes.container}>
