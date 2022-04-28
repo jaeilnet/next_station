@@ -8,7 +8,7 @@ interface MapProps {
   data: {
     row: row[];
   };
-  handleStationInfo: (data: RealTimeArrivalListType) => void;
+  handleStationInfo: (data: RealTimeArrivalListType, id: string[]) => void;
 }
 
 interface coordinate {
@@ -19,7 +19,7 @@ interface coordinate {
   };
 }
 
-interface row {
+export interface row {
   CRDNT_X: string;
   CRDNT_Y: string;
   ROUTE: string;
@@ -31,7 +31,6 @@ type Props = MapProps;
 
 const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
   const APIKEY = process.env.NEXT_PUBLIC_KAKAOMAP_APPKEY;
-  const REAL_TIEM_APIKEY = process.env.NEXT_PUBLIC_REAL_TIME_API_KEY;
 
   useEffect(() => {
     const mapScript = document.createElement("script");
@@ -98,7 +97,9 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
             latlng: position,
           });
 
-          handleFindSubway(findStation[0]);
+          const id = row.filter((e) => findStation[0] === e.STATN_NM);
+
+          handleFindSubway(findStation[0], id);
 
           for (let i = 0; i < filter.length; i++) {
             const imageSrc = markerStation(filter[i].title.split(" ")[0]);
@@ -131,14 +132,14 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
         }
       });
 
-      async function handleFindSubway(stationName: string) {
+      async function handleFindSubway(stationName: string, id: any) {
         try {
           const {
             data: { stationInfo },
           } = await API_post(`/api/station`, { stationName });
 
           if (stationInfo.realtimeArrivalList.length > 0) {
-            handleStationInfo(stationInfo);
+            handleStationInfo(stationInfo, id);
           }
         } catch (error) {
           console.log("역 가져오기 에러발생");
