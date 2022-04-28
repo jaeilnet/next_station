@@ -8,7 +8,7 @@ interface MapProps {
   data: {
     row: row[];
   };
-  handleStationInfo: (data: RealTimeArrivalListType) => void;
+  handleStationInfo: (data: RealTimeArrivalListType, id: string[]) => void;
 }
 
 interface coordinate {
@@ -19,7 +19,7 @@ interface coordinate {
   };
 }
 
-interface row {
+export interface row {
   CRDNT_X: string;
   CRDNT_Y: string;
   ROUTE: string;
@@ -31,7 +31,6 @@ type Props = MapProps;
 
 const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
   const APIKEY = process.env.NEXT_PUBLIC_KAKAOMAP_APPKEY;
-  const REAL_TIEM_APIKEY = process.env.NEXT_PUBLIC_REAL_TIME_API_KEY;
 
   useEffect(() => {
     const mapScript = document.createElement("script");
@@ -98,7 +97,9 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
             latlng: position,
           });
 
-          handleFindSubway(findStation[0]);
+          const id = row.filter((e) => findStation[0] === e.STATN_NM);
+
+          handleFindSubway(findStation[0], id);
 
           for (let i = 0; i < filter.length; i++) {
             const imageSrc = markerStation(filter[i].title.split(" ")[0]);
@@ -127,19 +128,18 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
 
             customOverlay.setMap(map);
             map.setCenter(position);
-            // marker.setMap(map);
           }
         }
       });
 
-      async function handleFindSubway(stationName: string) {
+      async function handleFindSubway(stationName: string, id: any) {
         try {
           const {
             data: { stationInfo },
           } = await API_post(`/api/station`, { stationName });
 
           if (stationInfo.realtimeArrivalList.length > 0) {
-            handleStationInfo(stationInfo);
+            handleStationInfo(stationInfo, id);
           }
         } catch (error) {
           console.log("역 가져오기 에러발생");
@@ -151,48 +151,7 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
   }, [row]);
 
-  return <div style={{ width: "100%", height: "600px" }} id="map"></div>;
+  return <div style={{ width: "100%", height: "400px" }} id="map"></div>;
 };
 
 export default Map;
-
-// ARRIVETIME: "06:12:00";
-// BRANCH_LINE: "";
-// DESTSTATION: "1019"; 도착지하철역코드
-// DESTSTATION2: "";
-// EXPRESS_YN: "G";
-// FL_FLAG: "";
-// FR_CODE: "133";
-// INOUT_TAG: "1"; 상/하행선
-// LEFTTIME: "06:12:30"; 출발시간
-// LINE_NUM: "01호선";
-// ORIGINSTATION: "1716"; 출발지하철역코드
-// STATION_CD: "0150";
-// STATION_NM: "서울역";
-// SUBWAYENAME: "광운대"; 도착지하철역명
-// SUBWAYSNAME: "병점"; 출발지하철역명
-// TRAIN_NO: "K402";
-// WEEK_TAG: "1"; 요일 평일 1/ 주말 2 휴일/일 3
-
-//  공통	list_total_count	총 데이터 건수 (정상조회 시 출력됨)
-// 공통	RESULT.CODE	요청결과 코드 (하단 메세지설명 참고)
-// 공통	RESULT.MESSAGE	요청결과 메시지 (하단 메세지설명 참고)
-// 1	LINE_NUM	호선
-// 2	FR_CODE	외부코드
-// (외부코드는 지하철에 역 이름과 함께 적혀있는 역번호로, 외국인의 경우 역명보다 역번호로 문의를 하는 경우가 많음)
-// 3	STATION_CD	전철역코드
-// 4	STATION_NM	전철역명
-// 5	TRAIN_NO	열차번호
-// 6	ARRIVETIME	도착시간
-// 7	LEFTTIME	출발시간
-// 8	ORIGINSTATION	출발지하철역코드
-// 9	DESTSTATION	도착지하철역코드
-// 10	SUBWAYSNAME	출발지하철역명
-// 11	SUBWAYENAME	도착지하철역명
-// 12	WEEK_TAG	요일
-// 13	INOUT_TAG	상/하행선
-// 14	FL_FLAG	플러그
-// 15	DESTSTATION2	도착역 코드2
-// 16	EXPRESS_YN	급행선
-// (G:일반(general) D: 급행(direct))
-// 17	BRANCH_LINE	지선

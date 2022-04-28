@@ -1,16 +1,18 @@
 .container {
-  background: #fff;
-  height: 65px;
+  background: #f3f3f3;
+  height: 3rem;
+  max-width: 1024px;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
 }
 
-.headerBox {
-  max-width: 1920px;
-  margin: 0 auto;
+.HeaderBox {
+  margin: 0 20px;
+  /* max-width: 375px; */
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  height: inherit;
-  background: #f3f3f3;
 }
 
 .logo {

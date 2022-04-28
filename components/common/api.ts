@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosPromise, AxiosResponse } from "axios";
 
 // type Method = "GET" | "POST" | "DELETE" | "PATCH";
 
