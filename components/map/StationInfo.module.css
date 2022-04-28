@@ -23,7 +23,7 @@
   border: 1px solid #b5b5b5;
 }
 
-.statinList > div {
+.statinList > div:first-child {
   display: flex;
   align-items: center;
   position: relative;
@@ -46,4 +46,28 @@
 .desc {
   font-size: 14px;
   color: #6e1b1b;
+}
+
+.warring {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  color: #ff7171;
+}
+
+.stationBox {
+  transition: all 5s;
+}
+
+.stationBox > div {
+  display: flex;
+  align-items: center;
+  position: relative;
+  grid-gap: 14px;
+  gap: 14px;
+  width: 100%;
+  overflow: scroll;
+  white-space: nowrap;
+  padding: 4px0;
+  padding: 8px 0;
 }
