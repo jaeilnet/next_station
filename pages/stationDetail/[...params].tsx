@@ -10,7 +10,9 @@ const StationDetail = ({
   stationPassengerData,
 }: any) => {
   console.log(stationPassengerData);
+
   const passengerCount = stationPassengerData.CardSubwayTime.row[0];
+
   const [passengerData, setPassengerData] = useState({
     labels: [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24],
     datasets: [
@@ -86,16 +88,18 @@ const StationDetail = ({
           })}
         </div>
       </div>
-      <div style={{ width: 375 }}>
-        <BarChart chartData={passengerData} />
-      </div>
+      {passengerCount && (
+        <div style={{ margin: "12px" }}>
+          <BarChart chartData={passengerData} />
+        </div>
+      )}
     </>
   );
 };
 
 export default StationDetail;
 
-export async function getStaticProps() {
+export async function getServerSideProps({ params: { params } }: any) {
   const SEOUL_API_KEY = process.env.NEXT_PUBLIC_SEOUL_API_KEY;
   const theDay = () => {
     const todayDay = dayjs(new Date()).day();
@@ -103,22 +107,26 @@ export async function getStaticProps() {
     else if (todayDay === 6) return 2;
     else return 1;
   };
-
+  console.log(params);
   const { data: incourseLast } = await API_get(
-    `http://openAPI.seoul.go.kr:8088/${SEOUL_API_KEY}/json/SearchLastTrainTimeByIDService/1/5/0220/${theDay()}/1/`
+    `http://openAPI.seoul.go.kr:8088/${SEOUL_API_KEY}/json/SearchLastTrainTimeByIDService/1/5/${
+      params[1]
+    }/${theDay()}/1/`
   );
 
   const { data: outcourseLast } = await API_get(
-    `http://openAPI.seoul.go.kr:8088/${SEOUL_API_KEY}/json/SearchLastTrainTimeByIDService/1/5/0220/${theDay()}/2/`
+    `http://openAPI.seoul.go.kr:8088/${SEOUL_API_KEY}/json/SearchLastTrainTimeByIDService/1/5/${
+      params[1]
+    }/${theDay()}/2/`
   );
 
   const line = "2호선";
   const { data: stationPassengerData } = await API_get(
     encodeURI(
-      `http://openapi.seoul.go.kr:8088/${SEOUL_API_KEY}/json/CardSubwayTime/1/1/202203/2호선/선릉/`
+      `http://openapi.seoul.go.kr:8088/${SEOUL_API_KEY}/json/CardSubwayTime/1/1/202203/2호선/${params[0]}/`
     )
   );
   return {
-    props: { incourseLast, outcourseLast, stationPassengerData },
+    props: { incourseLast, outcourseLast, stationPassengerData, params },
   };
 }
