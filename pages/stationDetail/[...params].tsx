@@ -60,40 +60,42 @@ const StationDetail = ({
   ].reverse();
 
   return (
-    <>
-      <div className={classes.stationTitle}>
-        {incourseLast.SearchLastTrainTimeByIDService.row[0].STATION_NM}역
+    <div className={classes.layout}>
+      <div className={classes.container}>
+        <div className={classes.stationTitle}>
+          {incourseLast.SearchLastTrainTimeByIDService.row[0].STATION_NM}역
+        </div>
+        <div className={classes.timetableWrap}>
+          <div className={classes.incourseWrap}>
+            내선순환(시계방향)
+            {reversedIncourseLast.map((incourse: any, idx: number) => {
+              return (
+                <div className={classes.timetable} key={idx}>
+                  <span>{incourse.SUBWAYENAME}행</span>
+                  <span>{incourse.LEFTTIME}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div className={classes.outcourseWrap}>
+            외선순환(반시계방향)
+            {reversedOutcourseLast.map((outcourse: any, idx: number) => {
+              return (
+                <div className={classes.timetable} key={idx}>
+                  <span>{outcourse.SUBWAYENAME}행</span>
+                  <span>{outcourse.LEFTTIME}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        {passengerCount && (
+          <div style={{ margin: "12px" }}>
+            <BarChart chartData={passengerData} />
+          </div>
+        )}
       </div>
-      <div className={classes.timetableWrap}>
-        <div className={classes.incourseWrap}>
-          내선순환(시계방향)
-          {reversedIncourseLast.map((incourse: any, idx: number) => {
-            return (
-              <div className={classes.timetable} key={idx}>
-                <span>{incourse.SUBWAYENAME}행</span>
-                <span>{incourse.LEFTTIME}</span>
-              </div>
-            );
-          })}
-        </div>
-        <div className={classes.outcourseWrap}>
-          외선순환(반시계방향)
-          {reversedOutcourseLast.map((outcourse: any, idx: number) => {
-            return (
-              <div className={classes.timetable} key={idx}>
-                <span>{outcourse.SUBWAYENAME}행</span>
-                <span>{outcourse.LEFTTIME}</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      {passengerCount && (
-        <div style={{ margin: "12px" }}>
-          <BarChart chartData={passengerData} />
-        </div>
-      )}
-    </>
+    </div>
   );
 };
 

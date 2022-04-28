@@ -1,3 +1,12 @@
+.layout {
+  max-width: 375px;
+  margin: 0 auto;
+}
+
+.container {
+  margin: 1rem 0.5rem;
+}
+
 .stationTitle {
   background-color: #009d3e;
   color: white;
