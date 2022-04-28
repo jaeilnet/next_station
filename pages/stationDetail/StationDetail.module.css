@@ -1,0 +1,31 @@
+.stationTitle {
+  background-color: #009d3e;
+  color: white;
+  font-size: 25px;
+  text-align: center;
+  margin: 10px 0;
+}
+.timetableWrap {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px;
+  text-align: center;
+}
+.timetable {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.incourseWrap {
+  display: flex;
+  flex-direction: column;
+  width: 160px;
+}
+
+.outcourseWrap {
+  display: flex;
+  flex-direction: column;
+  width: 160px;
+}
