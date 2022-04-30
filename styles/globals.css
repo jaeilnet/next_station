@@ -22,9 +22,10 @@ li {
 }
 
 .infoMessage {
-  border: 0.5px solid black;
-  background: ##ffffff52;
+  border: 0.5px solid #00000017;
+  background: #ffffff94;
   padding: 4px;
   font-weight: 200;
   font-size: 14px;
+  border-radius: 10px;
 }

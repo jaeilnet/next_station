@@ -142,7 +142,7 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
             handleStationInfo(stationInfo, id);
           }
         } catch (error) {
-          console.log("역 가져오기 에러발생");
+          console.log("역 가져오기 에러발생", error);
         }
       }
     };

@@ -1,46 +1,33 @@
 .container {
-  margin: 30px 0;
+  margin: 10px 0;
   max-width: 375px;
   overflow: auto;
   padding: 8px;
 }
 
+.station {
+  text-align: center;
+  padding: 10px 20px;
+  color: #fff;
+}
+
 .statinList {
-  display: flex;
-  flex-direction: column;
   padding: 10px 0;
   border-bottom: 1px solid #b5b5b5;
-  gap: 10px;
 }
 
 .statinList > div > button {
-  right: 0;
-  border: none;
-  position: absolute;
   border-radius: 6px;
   padding: 4px 8px;
   background: white;
   border: 1px solid #b5b5b5;
 }
 
-.statinList > div:first-child {
+.statinList > div {
   display: flex;
   align-items: center;
-  position: relative;
-  gap: 14px;
   width: 100%;
-  overflow: scroll;
-  white-space: nowrap;
-  padding: 4px0;
-  padding: 8px 0;
-}
-.statinList > div > p {
-  font-size: 14px;
-}
-
-.station {
-  font-size: 14px;
-  color: #a3a3a3;
+  padding-top: 8px;
 }
 
 .desc {
@@ -55,19 +42,28 @@
   color: #ff7171;
 }
 
-.stationBox {
-  transition: all 5s;
-}
-
-.stationBox > div {
+.titleBox {
   display: flex;
   align-items: center;
-  position: relative;
-  grid-gap: 14px;
-  gap: 14px;
-  width: 100%;
-  overflow: scroll;
+  gap: 10px;
+  /* overflow: auto;
   white-space: nowrap;
-  padding: 4px0;
-  padding: 8px 0;
+  max-width: calc(100% - 86px); */
+}
+
+.stationInfo {
+  display: flex;
+}
+
+.detailBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.detail {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
