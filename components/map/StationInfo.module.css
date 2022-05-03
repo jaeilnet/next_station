@@ -5,10 +5,19 @@
   padding: 8px;
 }
 
+.title {
+  text-align: center;
+  line-height: 2;
+}
+
 .station {
   text-align: center;
   padding: 10px 20px;
   color: #fff;
+  cursor: pointer;
+}
+
+.station:hover {
 }
 
 .statinList {

@@ -1,5 +1,5 @@
-import dayjs from "dayjs";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { API_post } from "../common/api";
 import { RealTimeArrivalListType } from "../constant";
 import markerStation from "./marker";
@@ -64,11 +64,23 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
             let position = new window.kakao.maps.LatLng(latitude, longitude);
 
             showMarker(position);
+            // 1분 간격으로 10분동안 위치 새로 받아오기
+            const timer = setInterval(() => showMarker(position), 60000);
+
+            setTimeout(() => {
+              clearTimeout(timer);
+            }, 60000 * 10);
           });
         } else {
           let position = new window.kakao.maps.LatLng(37.556228, 126.972135);
 
           showMarker(position);
+          const timer = setInterval(() => showMarker(position), 60000);
+
+          setTimeout(() => {
+            clearTimeout(timer);
+          }, 60000 * 10);
+
           alert("위치정보를 받아 올 수 없습니다.");
         }
 
@@ -133,7 +145,17 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
       });
 
       async function handleFindSubway(stationName: string, id: any) {
-        try {
+        const {
+          data: { stationInfo },
+        } = await API_post(`/api/station`, { stationName });
+
+        if (stationInfo.realtimeArrivalList.length > 0) {
+          handleStationInfo(stationInfo, id);
+        }
+
+        const time = 1000 * 30;
+
+        const timer = setInterval(async () => {
           const {
             data: { stationInfo },
           } = await API_post(`/api/station`, { stationName });
@@ -141,9 +163,11 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
           if (stationInfo.realtimeArrivalList.length > 0) {
             handleStationInfo(stationInfo, id);
           }
-        } catch (error) {
-          console.log("역 가져오기 에러발생", error);
-        }
+        }, time);
+
+        setTimeout(() => {
+          clearTimeout(timer);
+        }, time * 12);
       }
     };
     mapScript.addEventListener("load", onLoadKakaoMap);

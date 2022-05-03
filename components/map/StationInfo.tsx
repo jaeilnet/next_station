@@ -60,12 +60,13 @@ const StationInfo: React.FC<Props> = ({ data, id }) => {
 
   return (
     <div className={classes.container}>
+      <div className={classes.title}>내 위치에서 가장 가까운 역은?</div>
       <div
         style={{ background: stationColor(id[0].ROUTE) }}
         className={classes.station}
         onClick={() => handleDetail()}
       >
-        {id[0].ROUTE + id[0].STATN_NM}
+        {id[0].ROUTE + " " + id[0].STATN_NM}
       </div>
       {data.length > 0 ? (
         data.map((e: RealTimeArrivalListType, i: number) => (
@@ -81,10 +82,7 @@ const StationInfo: React.FC<Props> = ({ data, id }) => {
                   </p>
                 </>
               ) : (
-                <>
-                  <p>열차상태</p>
-                  <p className={classes.desc}>{e.arvlMsg2}</p>
-                </>
+                <p className={classes.desc}>{e.arvlMsg2}</p>
               )}
             </div>
             <div className={classes.detail}>

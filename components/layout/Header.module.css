@@ -9,20 +9,15 @@
 
 .HeaderBox {
   margin: 0 20px;
-  /* max-width: 375px; */
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
 
-.logo {
-  display: flex;
-  gap: 10px;
-  margin: 0 20px;
-}
-
+.logo,
 .login {
   display: flex;
   gap: 10px;
   margin: 0 20px;
+  cursor: pointer;
 }
