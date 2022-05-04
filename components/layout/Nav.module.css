@@ -1,0 +1,29 @@
+.container {
+  border-top: 1px solid #e5e5e5;
+  height: 3rem;
+  /* max-width: 1024px; */
+  max-width: 375px;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  position: fixed;
+}
+
+.HeaderBox {
+  margin: 0 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.login {
+  display: flex;
+  gap: 10px;
+  margin: 0 20px;
+  cursor: pointer;
+  align-items: center;
+}

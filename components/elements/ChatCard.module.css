@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #cacaca;
+}
+
+.grid {
+  display: flex;
+}
+
+.image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text {
+  margin: 0 20px;
+}
+
+.title {
+  display: flex;
+  gap: 10px;
+}
+
+.title p {
+  font-size: 12px;
+  color: #a7a7a7;
+}
+
+.title span {
+  font-size: 14px;
+}
+
+.button {
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0 8px;
+  border-radius: 10px;
+  background: transparent;
+  border: 0.5px solid #9c82ff;
+}
+
+.button:hover {
+  background: #9c82ff;
+  border: 0.5 solid #9c82ff;
+  color: #fff;
+}

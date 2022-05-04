@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import { API_post } from "../common/api";
 import { RealTimeArrivalListType } from "../constant";
 import markerStation from "./marker";
@@ -149,25 +148,32 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
           data: { stationInfo },
         } = await API_post(`/api/station`, { stationName });
 
-        if (stationInfo.realtimeArrivalList.length > 0) {
-          handleStationInfo(stationInfo, id);
+        if (stationInfo.status === 500) {
+          return alert(stationInfo.message);
         }
 
-        const time = 1000 * 30;
+        if (
+          stationInfo.status === 200 &&
+          stationInfo.realtimeArrivalList.length > 0
+        ) {
+          handleStationInfo(stationInfo, id);
 
-        const timer = setInterval(async () => {
-          const {
-            data: { stationInfo },
-          } = await API_post(`/api/station`, { stationName });
+          const time = 1000 * 30;
 
-          if (stationInfo.realtimeArrivalList.length > 0) {
-            handleStationInfo(stationInfo, id);
-          }
-        }, time);
+          const timer = setInterval(async () => {
+            const {
+              data: { stationInfo },
+            } = await API_post(`/api/station`, { stationName });
 
-        setTimeout(() => {
-          clearTimeout(timer);
-        }, time * 12);
+            if (stationInfo.realtimeArrivalList.length > 0) {
+              handleStationInfo(stationInfo, id);
+            }
+          }, time);
+
+          setTimeout(() => {
+            clearTimeout(timer);
+          }, time * 12);
+        }
       }
     };
     mapScript.addEventListener("load", onLoadKakaoMap);

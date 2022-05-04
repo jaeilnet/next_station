@@ -1,23 +1,18 @@
 .container {
-  background: #f3f3f3;
+  border-bottom: 1px solid #e5e5e5;
   height: 3rem;
-  max-width: 1024px;
+  /* max-width: 375px; */
+  width: 100%;
   display: flex;
   align-items: center;
   margin: 0 auto;
-}
-
-.HeaderBox {
-  margin: 0 20px;
+  /* left: 0;
+  right: 0;
+  top: 0;
   width: 100%;
-  display: flex;
-  justify-content: space-between;
+  position: fixed; */
 }
 
-.logo,
-.login {
-  display: flex;
-  gap: 10px;
-  margin: 0 20px;
-  cursor: pointer;
+.logo {
+  padding: 20px;
 }
