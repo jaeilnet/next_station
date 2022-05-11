@@ -59,41 +59,75 @@ const StationDetail = ({
     ...incourseLast.SearchLastTrainTimeByIDService.row,
   ].reverse();
 
+  const lineColor = () => {
+    switch (passengerCount.LINE_NUM) {
+      case "1호선":
+        return "#0052A4";
+      case "2호선":
+        return "#009D3E";
+      case "3호선":
+        return "#EF7C1C";
+      case "4호선":
+        return "#00A5DE";
+      case "5호선":
+        return "#996CAC";
+      case "6호선":
+        return "#CD7C2F";
+      case "7호선":
+        return "#747F00";
+      case "8호선":
+        return "#EA545D";
+      case "9호선":
+      case "9호선2~3단계":
+        return "#BDB092";
+      case "분당선":
+        return "#F5A200";
+      case "경강선":
+        return "#003DA5";
+    }
+    return;
+  };
+
   return (
-    <>
-      <div className={classes.stationTitle}>
-        {incourseLast.SearchLastTrainTimeByIDService.row[0].STATION_NM}역
+    <div className={classes.layout}>
+      <div className={classes.container}>
+        <div
+          className={classes.stationTitle}
+          style={{ backgroundColor: lineColor() }}
+        >
+          {incourseLast.SearchLastTrainTimeByIDService.row[0].STATION_NM}역
+        </div>
+        <div className={classes.timetableWrap}>
+          <div className={classes.incourseWrap}>
+            내선 순환(시계 방향)
+            {reversedIncourseLast.map((incourse: any, idx: number) => {
+              return (
+                <div className={classes.timetable} key={idx}>
+                  <span>{incourse.SUBWAYENAME}행</span>
+                  <span>{incourse.LEFTTIME}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div className={classes.outcourseWrap}>
+            외선 순환(반시계 방향)
+            {reversedOutcourseLast.map((outcourse: any, idx: number) => {
+              return (
+                <div className={classes.timetable} key={idx}>
+                  <span>{outcourse.SUBWAYENAME}행</span>
+                  <span>{outcourse.LEFTTIME}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        {passengerCount && (
+          <div style={{ margin: "12px" }}>
+            <BarChart chartData={passengerData} />
+          </div>
+        )}
       </div>
-      <div className={classes.timetableWrap}>
-        <div className={classes.incourseWrap}>
-          내선순환(시계방향)
-          {reversedIncourseLast.map((incourse: any, idx: number) => {
-            return (
-              <div className={classes.timetable} key={idx}>
-                <span>{incourse.SUBWAYENAME}행</span>
-                <span>{incourse.LEFTTIME}</span>
-              </div>
-            );
-          })}
-        </div>
-        <div className={classes.outcourseWrap}>
-          외선순환(반시계방향)
-          {reversedOutcourseLast.map((outcourse: any, idx: number) => {
-            return (
-              <div className={classes.timetable} key={idx}>
-                <span>{outcourse.SUBWAYENAME}행</span>
-                <span>{outcourse.LEFTTIME}</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      {passengerCount && (
-        <div style={{ margin: "12px" }}>
-          <BarChart chartData={passengerData} />
-        </div>
-      )}
-    </>
+    </div>
   );
 };
 
@@ -120,10 +154,12 @@ export async function getServerSideProps({ params: { params } }: any) {
     }/${theDay()}/2/`
   );
 
-  const line = "2호선";
   const { data: stationPassengerData } = await API_get(
     encodeURI(
-      `http://openapi.seoul.go.kr:8088/${SEOUL_API_KEY}/json/CardSubwayTime/1/1/202203/2호선/${params[0]}/`
+      `http://openapi.seoul.go.kr:8088/${SEOUL_API_KEY}/json/CardSubwayTime/1/1/202204/${params[1].substring(
+        1,
+        2
+      )}호선/${params[0]}/`
     )
   );
   return {
