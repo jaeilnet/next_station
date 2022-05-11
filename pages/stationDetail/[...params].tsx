@@ -154,10 +154,12 @@ export async function getServerSideProps({ params: { params } }: any) {
     }/${theDay()}/2/`
   );
 
-  const line = "2호선";
   const { data: stationPassengerData } = await API_get(
     encodeURI(
-      `http://openapi.seoul.go.kr:8088/${SEOUL_API_KEY}/json/CardSubwayTime/1/1/202203/2호선/${params[0]}/`
+      `http://openapi.seoul.go.kr:8088/${SEOUL_API_KEY}/json/CardSubwayTime/1/1/202204/${params[1].substring(
+        1,
+        2
+      )}호선/${params[0]}/`
     )
   );
   return {
