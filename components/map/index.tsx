@@ -148,13 +148,13 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
           data: { stationInfo },
         } = await API_post(`/api/station`, { stationName });
 
-        if (stationInfo.status === 500) {
+        if (stationInfo.errorMessage.status === 500) {
           return alert(stationInfo.message);
         }
 
         if (
-          stationInfo.status === 200 &&
-          stationInfo.realtimeArrivalList.length > 0
+          stationInfo.errorMessage.status === 200 &&
+          stationInfo.errorMessage.total > 0
         ) {
           handleStationInfo(stationInfo, id);
 
@@ -165,7 +165,7 @@ const Map: React.FC<Props> = ({ data: { row }, handleStationInfo }) => {
               data: { stationInfo },
             } = await API_post(`/api/station`, { stationName });
 
-            if (stationInfo.realtimeArrivalList.length > 0) {
+            if (stationInfo.errorMessage.total > 0) {
               handleStationInfo(stationInfo, id);
             }
           }, time);
