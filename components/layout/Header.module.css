@@ -11,8 +11,16 @@
   top: 0;
   width: 100%;
   position: fixed; */
+  position: relative;
 }
 
 .logo {
   padding: 20px;
+}
+
+.back {
+  position: absolute;
+  padding: 10px;
+  right: 0;
+  cursor: pointer;
 }
